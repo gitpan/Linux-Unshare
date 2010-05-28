@@ -15,10 +15,10 @@ our %EXPORT_TAGS = ( 'clone' => [ qw(
 	CLONE_THREAD CLONE_FS CLONE_NEWNS CLONE_SIGHAND CLONE_VM
 	CLONE_FILES CLONE_SYSVSEM CLONE_NEWUTS CLONE_NEWIPC CLONE_NEWNET
 ) ] );
-our @EXPORT_OK = ( @{ $EXPORT_TAGS{'clone'} }, qw(unshare) );
+our @EXPORT_OK = ( @{ $EXPORT_TAGS{'clone'} }, qw(unshare unshare_ns) );
 our @EXPORT = qw( );
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 sub AUTOLOAD {
     my $constname;
@@ -36,6 +36,8 @@ sub AUTOLOAD {
 
 require XSLoader;
 XSLoader::load('Linux::Unshare', $VERSION);
+
+sub unshare_ns { return unshare(0x20000) ? 0 : -1; }
 
 1;
 __END__

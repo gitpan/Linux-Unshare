@@ -2,7 +2,7 @@ use strict;
 use warnings FATAL => 'all';
 
 use Test::More tests => 4;
-BEGIN { use_ok('Linux::Unshare', qw(unshare CLONE_NEWNS CLONE_FS)) };
+BEGIN { use_ok('Linux::Unshare', qw(unshare CLONE_NEWNS CLONE_FS unshare_ns)) };
 
 SKIP: {
 	skip "Should be root to test mount --bind", 1 if $<;
@@ -10,7 +10,8 @@ SKIP: {
 	if ($pid) {
 		waitpid($pid, 0);
 	} else {
-		unshare(CLONE_FS) or die $!;
+		# Legacy unshare_ns should return 0 on success
+		unshare_ns() and die $!;
 		system("mount --bind /dev/null $0") and die;
 		exit;
 	}

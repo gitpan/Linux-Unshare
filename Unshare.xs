@@ -16,9 +16,7 @@ MODULE = Linux::Unshare		PACKAGE = Linux::Unshare
 
 INCLUDE: const-xs.inc
 
-SV *
-unshare(flags)
-	int flags;
+SV * unshare(int flags)
 	CODE:
 		ST(0) = sv_newmortal();
 		if(unshare(flags) == 0)
